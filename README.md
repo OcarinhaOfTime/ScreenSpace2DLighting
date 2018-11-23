@@ -3,6 +3,7 @@ This is a simple lighting system implemented using the newest Unity 2018.3 (stil
 built on top of the new Post-Processing Stack, using the LightWeight Render Pipeline. 
 By using LWRP, this system provides a high performance 2D lighting in low-end devices.
 Even thought the target is performance constrained platforms, the system works on standard render pipelines as well.
+![Sample Image](sample.png)
 Video Demo Here: https://youtu.be/utWp8z9cATo
 
 # Features
