@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -8,14 +6,14 @@ using UnityEngine.Rendering.PostProcessing;
 [PostProcess(typeof(Lighting2DRenderer), PostProcessEvent.AfterStack, "Custom/Lighting2D")]
 public sealed class Lighting2D : PostProcessEffectSettings {
     [Range(0f, 1f)]
-    public FloatParameter brightness = new FloatParameter { value = 0.5f };
+    public FloatParameter ambientLight = new FloatParameter { value = 0.5f };
     public TextureParameter lightingTexture = new TextureParameter();
 }
 
 public sealed class Lighting2DRenderer : PostProcessEffectRenderer<Lighting2D> {
     public override void Render(PostProcessRenderContext context) {
         var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/Lighting2D"));
-        sheet.properties.SetFloat("_Brightness", settings.brightness);
+        sheet.properties.SetFloat("_AmbientLight", settings.ambientLight);
         if(settings.lightingTexture.value == null) {
             var t = new Texture2D(1, 1);
             t.SetPixel(0, 0, Color.black);
@@ -24,7 +22,6 @@ public sealed class Lighting2DRenderer : PostProcessEffectRenderer<Lighting2D> {
         }
 
         sheet.properties.SetTexture("_LightTex", settings.lightingTexture);
-
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }
 }

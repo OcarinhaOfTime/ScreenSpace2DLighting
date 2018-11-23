@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [ExecuteInEditMode]
 public class Lighting2DLightSource : MonoBehaviour {
@@ -19,13 +17,11 @@ public class Lighting2DLightSource : MonoBehaviour {
     }
 
     private void OnEnable() {
-        print("OnEnable " + name);
         if(Lighting2DVolume.instance != null && !added)
             Lighting2DVolume.instance.Register(this);
     }
 
     private void OnDisable() {
-        print("OnDisable " + name);
         Lighting2DVolume.instance.Remove(this);
         added = false;
     }

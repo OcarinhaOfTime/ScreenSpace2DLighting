@@ -55,13 +55,18 @@ Shader "Hidden/PointLight2D"
 
             fixed4 frag (v2f i) : SV_Target
             {
+                //sampling the screen texture
                 fixed4 col = tex2D(_MainTex, i.uv);
+                float2 p = _Coords.xy; //light source position, in screen space
+
+                //adjusting the uv to draw a circle indepent of aspect ratio
                 i.uv -= .5;
-                _Coords.xy -= .5;
+                p -= .5;
                 i.uv.x *= _Coords.w;
-                _Coords.x *= _Coords.w;
-                float2 p = float2(_Coords.x, _Coords.y);
-                float d = saturate(distance(i.uv, p));
+                p.x *= _Coords.w;
+                
+                float d = saturate(distance(i.uv, p)); //distance field for the light influence
+                
                 d = 1 - smoothstep(0, _Coords.z, d);
                 d = pow(d, _Exp);
                 return col + d * _Color * _Intensity;

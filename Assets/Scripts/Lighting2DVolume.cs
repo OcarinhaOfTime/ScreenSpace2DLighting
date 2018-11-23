@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -16,6 +15,12 @@ public class Lighting2DVolume : MonoBehaviour {
     public static Lighting2DVolume instance;
     private Camera cam;
     private float ratio;
+
+    //caching the ids for more performance
+    private int _ColorID = Shader.PropertyToID("_Color");
+    private int _IntensityID = Shader.PropertyToID("_Intensity");
+    private int _ExpID = Shader.PropertyToID("_Exp");
+    private int _CoordsID = Shader.PropertyToID("_Coords");
 
     private void Awake() {
         instance = this;
@@ -49,10 +54,10 @@ public class Lighting2DVolume : MonoBehaviour {
 
         foreach(var s in sources) {
             var p = cam.WorldToViewportPoint(s.transform.position);
-            circleMaterial.SetColor("_Color", s.color);
-            circleMaterial.SetFloat("_Intensity", s.intensity);
-            circleMaterial.SetFloat("_Exp", s.exponent);
-            circleMaterial.SetVector("_Coords", new Vector4(p.x, p.y, s.range, ratio));
+            circleMaterial.SetColor(_ColorID, s.color);
+            circleMaterial.SetFloat(_IntensityID, s.intensity);
+            circleMaterial.SetFloat(_ExpID, s.exponent);
+            circleMaterial.SetVector(_CoordsID, new Vector4(p.x, p.y, s.range, ratio));
 
             Graphics.Blit(rt, rtt, circleMaterial);
             Graphics.Blit(rtt, rt);
@@ -63,12 +68,10 @@ public class Lighting2DVolume : MonoBehaviour {
     }
 
     public void Register(Lighting2DLightSource source) {
-        print("Registered " + source.name);
         sources.Add(source);
     }
 
     public void Remove(Lighting2DLightSource source) {
-        print("Removed " + source.name);
         sources.Remove(source);
     }
 }
